@@ -145,30 +145,34 @@ def predict_ctr_from_description(product_desc: str) -> Union[float, None]:
     
 def evaluate_ctr_with_llm(current_ctr: float, product_desc: str) -> str:
     """
-    Ask the LLM to evaluate the CTR based on the product description and give insights on whether it's good, average, or needs improvement.
-    Additionally, ask for expected growth and suggestions for improvement.
+    Ask the LLM to evaluate the CTR based on the product description and give a concise, easy-to-read summary.
 
     Args:
         current_ctr (float): The current CTR for the ad.
         product_desc (str): The description of the product being advertised.
 
     Returns:
-        str: The evaluation of the CTR, including performance, expected growth, and suggestions.
+        str: The formatted evaluation of the CTR, including performance, industry comparison, expected trend, and quick suggestions.
     """
     prompt = f"""
-    Given the product description below and the current CTR value, evaluate the performance of the CTR and provide feedback:
-    
-    Product description: "{product_desc}"
-    Current CTR: {current_ctr}
-    
-    Please answer the following questions:
-    1. Is the current CTR good, average, or poor?
-    2. How does the CTR compare to industry standards or typical performance?
-    3. What is the expected growth of the CTR over the next 30 days?
-    4. Are there any suggestions for improving the CTR based on the product and ad campaign?
+You are an ad performance expert.
+
+Given the product description and CTR value below, evaluate the ad's performance. 
+
+Product Description: "{product_desc}"
+CTR: {current_ctr:.4f} ({current_ctr*100:.1f}%)
+
+Please respond in a **clean and easy-to-scan format** using short bullet points or a simple table.
+
+Include:
+1. 🔍 Quick verdict: Is the CTR good, average, or poor?
+2. 📊 Comparison with industry benchmarks
+3. 📈 Expected trend (30-day outlook)
+4. 💡 2–3 short, actionable tips to improve CTR or maintain performance
+
+Keep it brief (under 150 words), bullet-style preferred. Avoid long paragraphs.
     """
 
-    # Call the OpenAI API to get the LLM's evaluation
     response = client.chat.completions.create(
         model="gpt-4.1-mini",
         messages=[{"role": "user", "content": prompt}],

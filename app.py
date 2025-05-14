@@ -1,7 +1,10 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import nexai.src.agents.Search_Agent as Agent1 # Import the agent functions from agent.py
 import nexai.src.agents.Assistant_Agent as Assistant
-app = Flask(__name__)
+import nexai.src.agents.Ad_Performance_Predictor as Performance
+
+app = Flask(__name__, template_folder="nexai/templates", static_folder="nexai/static")
+
 chat_history = []  # Store chat history for the assistant
 
 @app.route("/", methods=["GET", "POST"])
@@ -43,6 +46,27 @@ def chat():
     chat_history.append((user_message, assistant_reply))
 
     return {"assistant_reply": assistant_reply}
+
+
+@app.route("/predict_ctr", methods=["POST"])
+def predict_ctr():
+    product_desc = request.form.get("product")
+    if not product_desc:
+        return jsonify({"error": "Product description is required"}), 400
+
+    # Step 1: Predict CTR
+    predicted_ctr = Performance.predict_ctr_from_description(product_desc)
+
+    if predicted_ctr is None:
+        return jsonify({"error": "Failed to predict CTR"}), 500
+
+    # Step 2: Ask LLM to evaluate this CTR
+    evaluation = Performance.evaluate_ctr_with_llm(predicted_ctr, product_desc)
+
+    return jsonify({
+        "ctr": predicted_ctr * 100,  # percentage format
+        "evaluation": evaluation
+    })
 
 if __name__ == "__main__":
     app.run(debug=True)
