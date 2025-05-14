@@ -1,3 +1,6 @@
 # Ignore secrets and config
 .env
 secret.py
+*.pkl
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints
