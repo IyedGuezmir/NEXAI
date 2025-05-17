@@ -1,36 +1,44 @@
 # NEXAI
 
 ## 📂 Project Structure
+
 ```
+Architecture/
+└── project-structure-script.sh
+
 nexai/
 │
 ├── src/
 │   ├── agents/
-│   │   ├── Search_Agent.py
-│   │   └── Assistant_Agent.py
-│   │  
+│   │   ├── Assistant_Agent.py
+│   │   ├── Ad_Performance_Agent.py
+│   │   └── Search_Agent.py
 │   │
 │   ├── data/
 │   │   └── Ad_Performance/
-│   │ 
 │   │
 │   ├── models/
-│   │   ├── neural_networks/
-│   │   └── machine_learning_models/
+│   │   ├── machine_learning_models/
+│   │   │   └── encoders/
+│   │   └── neural_networks/
 │   │
 │   └── utils/
-│       └── data_preprocessing.py
-│       
+│       ├── data_preprocessing.py
+│       └── model_training.py
 │
 ├── notebooks/
-│    └── performance_stimulator.ipynb
-│   
+│   └── performance_stimulator.ipynb
 │
 ├── tests/
 │
-├── app.py
+├── static/
+│   └── style.css
 │
+├── templates/
+│   └── index.html
+│
+├── app.py
 ├── requirements.txt
+├── train.py
 └── README.md
-
 ```
