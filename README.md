@@ -2,7 +2,7 @@
 
 ## 📂 Project Structure
 
-
+```
 Architecture/
 └── project-structure-script.sh
 
@@ -41,3 +41,4 @@ nexai/
 ├── requirements.txt
 ├── train.py
 └── README.md
+```
